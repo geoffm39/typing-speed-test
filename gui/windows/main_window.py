@@ -14,12 +14,27 @@ class MainWindow:
         root.rowconfigure(0, weight=1)
 
         mainframe = ttk.Frame(root)
-        mainframe.grid(column=0, row=0, sticky=(N, W, E, S))
+        mainframe.grid(column=0, row=0, sticky='nwes')
         mainframe.columnconfigure(0, weight=1)
         mainframe.rowconfigure(1, weight=1)
+        button_frame = ttk.Frame(mainframe)
+        button_frame.columnconfigure(0, weight=1)
+        button_frame.rowconfigure(0, weight=1)
+        button_frame.grid(column=0, row=0, pady=(15, 15), sticky='we')
+        test_frame = ttk.Frame(mainframe, borderwidth=5, relief='ridge')
+        test_frame.grid(column=0, row=1, padx=50, pady=(0, 50), sticky='nwes')
 
-        self.button_frame = ttk.Frame(mainframe)
-        self.button_frame.grid(column=0, row=0, sticky=(W, E))
+        self.options_frame = OptionsFrame(test_frame)
+        self.text_frame = TextFrame(test_frame)
+        self.text_scrollbar = ttk.Scrollbar(test_frame,
+                                            orient='vertical',
+                                            command=self.text_frame.yview)
+        self.text_frame.configure(yscrollcommand=self.text_scrollbar.set)
+        self.results_frame = ResultsFrame(test_frame)
 
-        self.test_frame = ttk.Frame(mainframe, borderwidth=5, relief='ridge')
-        self.test_frame.grid(column=0, row=1, sticky=(N, W, E, S))
+        self.start_button = ttk.Button(button_frame, text='Load Text')
+        self.restart_test_button = ttk.Button(button_frame)
+        self.try_again_button = ttk.Button(button_frame)
+
+        self.start_button.grid(column=0, row=0)
+        self.options_frame.grid(column=0, row=1)
