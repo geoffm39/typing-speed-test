@@ -4,7 +4,8 @@ from tkinter import ttk
 from gui.custom_widgets.text_frame import TextFrame
 from gui.custom_widgets.results_frame import ResultsFrame
 from gui.custom_widgets.options_frame import OptionsFrame
-
+from test_text import TestText
+from test_result import TestResult
 
 class MainWindow:
     def __init__(self, root: Tk):
@@ -12,6 +13,8 @@ class MainWindow:
         root.iconbitmap('gui/keyboard_icon.ico')
         root.columnconfigure(0, weight=1)
         root.rowconfigure(0, weight=1)
+
+        self.test_text = TestText()
 
         mainframe = ttk.Frame(root)
         mainframe.grid(column=0, row=0, sticky='nwes')
@@ -32,13 +35,13 @@ class MainWindow:
         self.text_frame.configure(yscrollcommand=self.text_scrollbar.set)
         self.results_frame = ResultsFrame(test_frame)
 
-        self.start_button = ttk.Button(button_frame, text='Generate Text', command=self.generate_text)
+        self.start_button = ttk.Button(button_frame, text='Generate Text', command=self.apply_options)
         self.restart_test_button = ttk.Button(button_frame)
         self.try_again_button = ttk.Button(button_frame)
 
         self.start_button.grid(column=0, row=0)
         self.options_frame.grid(column=0, row=1)
 
-    def generate_text(self):
+    def apply_options(self):
         options = self.options_frame.get_options()
-        print(options)
+        self.test_text.generate_text(options['mode'])
