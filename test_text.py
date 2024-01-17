@@ -48,3 +48,6 @@ class TestText:
     @staticmethod
     def is_valid_text(text):
         return all(char in VALID_CHARACTERS for char in text)
+
+    def generate_numbers(self):
+        pass
