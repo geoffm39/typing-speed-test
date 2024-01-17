@@ -32,9 +32,13 @@ class MainWindow:
         self.text_frame.configure(yscrollcommand=self.text_scrollbar.set)
         self.results_frame = ResultsFrame(test_frame)
 
-        self.start_button = ttk.Button(button_frame, text='Load Text')
+        self.start_button = ttk.Button(button_frame, text='Generate Text', command=self.generate_text)
         self.restart_test_button = ttk.Button(button_frame)
         self.try_again_button = ttk.Button(button_frame)
 
         self.start_button.grid(column=0, row=0)
         self.options_frame.grid(column=0, row=1)
+
+    def generate_text(self):
+        options = self.options_frame.get_options()
+        print(options)
