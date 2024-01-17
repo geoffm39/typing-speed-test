@@ -13,10 +13,7 @@ VALID_CHARACTERS = [
 
 
 def is_valid_text(text):
-    for character in text:
-        if character not in VALID_CHARACTERS:
-            return False
-    return True
+    return all(ord(char) < 128 or char in VALID_CHARACTERS for char in text)
 
 
 class TestText:
@@ -49,7 +46,8 @@ class TestText:
         paragraph = self.paragraph_generator.paragraph(min_sentences=10)
         if not is_valid_text(paragraph):
             self.generate_paragraph()
-        return paragraph
+        filtered_paragraph = ''.join(char for char in paragraph if char in VALID_CHARACTERS)
+        return filtered_paragraph
 
     def generate_numbers(self):
         pass
