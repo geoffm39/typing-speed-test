@@ -1,5 +1,6 @@
 from essential_generators import DocumentGenerator
 from wonderwords import RandomWord
+import random
 
 # Standard characters and symbols on an American keyboard
 VALID_CHARACTERS = [
@@ -10,6 +11,8 @@ VALID_CHARACTERS = [
     '`', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
     'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '{', '|', '}', '~'
 ]
+
+NUMPAD_CHARACTERS = ['+', '-', '*', '/', '.', '.', ' ', ' ', ' ', ' ', ' ', ' ']
 
 
 class TestText:
@@ -50,4 +53,12 @@ class TestText:
         return all(char in VALID_CHARACTERS for char in text)
 
     def generate_numbers(self):
-        pass
+        for _ in range(500):
+            random_number = ''
+            for _ in range(random.randint(1, 5)):
+                random_digit = str(random.randint(0, 9))
+                random_number += random_digit
+            random_character = random.choice(NUMPAD_CHARACTERS)
+            self.text += f'{random_number}{random_character}'
+        print(self.text)
+
