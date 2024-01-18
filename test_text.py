@@ -27,7 +27,7 @@ class TestText:
         elif mode == 'hard':
             self.generate_hard_text()
         else:
-            self.generate_numbers()
+            self.generate_numpad_text()
 
     def generate_easy_text(self):
         words_list = self.word_generator.random_words(amount=500)
@@ -52,12 +52,10 @@ class TestText:
     def is_valid_text(text):
         return all(char in VALID_CHARACTERS for char in text)
 
-    def generate_numbers(self):
+    def generate_numpad_text(self):
         for _ in range(500):
-            random_number = ''
-            for _ in range(random.randint(1, 5)):
-                random_digit = str(random.randint(0, 9))
-                random_number += random_digit
+            random_digits = [str(random.randint(0, 9)) for _ in range(random.randint(1, 5))]
+            random_number = ''.join(random_digits)
             random_character = random.choice(NUMPAD_CHARACTERS)
             self.text += f'{random_number}{random_character}'
         print(self.text)
