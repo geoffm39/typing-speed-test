@@ -48,7 +48,8 @@ class MainWindow:
 
     def apply_options(self):
         options = self.options_frame.get_options()
-        self.text_frame.add_text(options['mode'])
+        self.text_frame.set_options(options['mode'], options['backspace'])
+        self.text_frame.add_text()
 
         self.start_button.grid_forget()
         self.text_frame.grid(column=0, row=0)
