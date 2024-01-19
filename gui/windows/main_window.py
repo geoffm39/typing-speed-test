@@ -5,7 +5,6 @@ from gui.custom_widgets.text_frame import TextFrame
 from gui.custom_widgets.results_frame import ResultsFrame
 from gui.custom_widgets.options_frame import OptionsFrame
 from test_result import TestResult
-from constants import MODIFIER_KEYS
 
 
 class MainWindow:
@@ -45,9 +44,7 @@ class MainWindow:
         self.options_frame.grid(column=0, row=0)
 
     def on_key_press(self, event):
-        if event.keysym in MODIFIER_KEYS:
-            return
-        print(event.char)
+        self.text_frame.process_keyboard_input(event)
 
     def apply_options(self):
         options = self.options_frame.get_options()

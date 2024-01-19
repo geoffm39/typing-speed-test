@@ -55,5 +55,5 @@ class TestText:
         self.text += numbers
         return numbers
 
-    def get_character_at_index(self, index):
-        return self.text[index]
+    def is_correct_input(self, char, index):
+        return char == self.text[index]
