@@ -1,18 +1,8 @@
 from essential_generators import DocumentGenerator
 from wonderwords import RandomWord
+from constants import VALID_CHARACTERS, NUMPAD_CHARACTERS
+
 import random
-
-# Standard characters and symbols on an American keyboard
-VALID_CHARACTERS = [
-    ' ', '!', '"', '#', '$', '%', '&', "'", '(', ')', '*', '+', ',', '-', '.', '/',
-    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ':', ';', '<', '=', '>', '?',
-    '@', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
-    'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '[', '\\', ']', '^', '_',
-    '`', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
-    'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '{', '|', '}', '~'
-]
-
-NUMPAD_CHARACTERS = ['+', '-', '*', '/', '.', '.', ' ', ' ', ' ', ' ', ' ', ' ']
 
 
 class TestText:
@@ -21,25 +11,28 @@ class TestText:
         self.word_generator = RandomWord()
         self.paragraph_generator = DocumentGenerator()
 
-    def generate_text(self, mode: str):
-        if mode == 'easy':
-            self.generate_easy_text()
-        elif mode == 'hard':
-            self.generate_hard_text()
+    def generate_text(self, test_mode: str):
+        if test_mode == 'easy':
+            text = self.generate_easy_text()
+        elif test_mode == 'hard':
+            text = self.generate_hard_text()
         else:
-            self.generate_numpad_text()
+            text = self.generate_numpad_text()
+        return text
 
     def generate_easy_text(self):
         words_list = self.word_generator.random_words(amount=500)
         words = ' '.join(words_list)
         self.text += words
-        print(self.text)
+        return words
 
     def generate_hard_text(self):
+        paragraphs = ''
         for _ in range(5):
             paragraph = self.generate_paragraph()
-            self.text += paragraph
-        print(self.text)
+            paragraphs += paragraph
+        self.text += paragraphs
+        return paragraphs
 
     def generate_paragraph(self):
         paragraph = self.paragraph_generator.paragraph(min_sentences=10)
@@ -53,10 +46,14 @@ class TestText:
         return all(char in VALID_CHARACTERS for char in text)
 
     def generate_numpad_text(self):
+        numbers = ''
         for _ in range(500):
             random_digits = [str(random.randint(0, 9)) for _ in range(random.randint(1, 5))]
             random_number = ''.join(random_digits)
             random_character = random.choice(NUMPAD_CHARACTERS)
-            self.text += f'{random_number}{random_character}'
-        print(self.text)
+            numbers += f'{random_number}{random_character}'
+        self.text += numbers
+        return numbers
 
+    def get_character_at_index(self, index):
+        return self.text[index]

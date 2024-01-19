@@ -2,11 +2,7 @@ import tkinter
 from tkinter import *
 from tkinter import ttk
 
-TIMER_OPTIONS = {'1 Minute': 1,
-                 '3 Minutes': 3,
-                 '5 Minutes': 5,
-                 '10 Minutes': 10,
-                 'Marathon!': None}
+from constants import TIMER_OPTIONS
 
 
 class OptionsFrame(ttk.Frame):

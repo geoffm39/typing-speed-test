@@ -4,8 +4,9 @@ from tkinter import ttk
 from gui.custom_widgets.text_frame import TextFrame
 from gui.custom_widgets.results_frame import ResultsFrame
 from gui.custom_widgets.options_frame import OptionsFrame
-from test_text import TestText
 from test_result import TestResult
+from constants import MODIFIER_KEYS
+
 
 class MainWindow:
     def __init__(self, root: Tk):
@@ -13,8 +14,6 @@ class MainWindow:
         root.iconbitmap('gui/keyboard_icon.ico')
         root.columnconfigure(0, weight=1)
         root.rowconfigure(0, weight=1)
-
-        self.test_text = TestText()
 
         mainframe = ttk.Frame(root)
         mainframe.grid(column=0, row=0, sticky='nwes')
@@ -26,9 +25,12 @@ class MainWindow:
         button_frame.grid(column=0, row=0, pady=(15, 15), sticky='we')
         test_frame = ttk.Frame(mainframe, borderwidth=5, relief='ridge')
         test_frame.grid(column=0, row=1, padx=50, pady=(0, 50), sticky='nwes')
+        test_frame.columnconfigure(0, weight=1)
+
+        root.bind('<Key>', self.on_key_press)
 
         self.options_frame = OptionsFrame(test_frame)
-        self.text_frame = TextFrame(test_frame)
+        self.text_frame = TextFrame(test_frame, width=100, height=30, wrap='word', takefocus=0)
         self.text_scrollbar = ttk.Scrollbar(test_frame,
                                             orient='vertical',
                                             command=self.text_frame.yview)
@@ -40,8 +42,17 @@ class MainWindow:
         self.try_again_button = ttk.Button(button_frame)
 
         self.start_button.grid(column=0, row=0)
-        self.options_frame.grid(column=0, row=1)
+        self.options_frame.grid(column=0, row=0)
+
+    def on_key_press(self, event):
+        if event.keysym in MODIFIER_KEYS:
+            return
+        print(event.char)
 
     def apply_options(self):
         options = self.options_frame.get_options()
-        self.test_text.generate_text(options['mode'])
+        self.text_frame.add_text(options['mode'])
+
+        self.start_button.grid_forget()
+        self.text_frame.grid(column=0, row=0)
+        self.text_scrollbar.grid(column=1, row=0, sticky='ns')
