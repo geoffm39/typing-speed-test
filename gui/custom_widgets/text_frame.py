@@ -34,7 +34,6 @@ class TextFrame(Text):
         self.test_mode = test_mode
         self.backspace_allowed = backspace_allowed
 
-
     def add_text(self):
         text = self.test_text.generate_text(self.test_mode)
         self.insert('end', text)
