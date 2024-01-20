@@ -51,6 +51,7 @@ class MainWindow:
         self.text_frame.set_options(options['mode'], options['backspace'])
         self.text_frame.add_text()
 
+        self.start_button.configure(state='disabled')
         self.start_button.grid_forget()
         self.text_frame.grid(column=0, row=0)
         self.text_scrollbar.grid(column=1, row=0, sticky='ns')

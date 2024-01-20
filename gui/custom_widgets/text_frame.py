@@ -64,7 +64,11 @@ class TextFrame(Text):
     def process_backspace_keypress(self):
         if self.backspace_allowed:
             self.move_cursor_backwards()
+            self.remove_tags_at_index(self.cursor_position)
         else:
+            self.remove_tags_at_index(self.cursor_position)
             self.set_char_tag('incorrect')
-            # need to sort out tags, colour not updating with multi tag
 
+    def remove_tags_at_index(self, index):
+        for tag in self.tag_names(f'1.{index}'):
+            self.tag_remove(tag, f'1.{index}')

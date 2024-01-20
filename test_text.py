@@ -37,7 +37,7 @@ class TestText:
     def generate_paragraph(self):
         paragraph = self.paragraph_generator.paragraph(min_sentences=10)
         if not self.is_valid_text(paragraph):
-            self.generate_paragraph()
+            return self.generate_paragraph()
         filtered_paragraph = ''.join(char for char in paragraph if char in VALID_CHARACTERS)
         return filtered_paragraph
 
