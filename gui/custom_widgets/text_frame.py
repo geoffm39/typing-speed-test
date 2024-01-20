@@ -44,6 +44,9 @@ class TextFrame(Text):
         if self.is_backspace(event):
             self.process_backspace_keypress()
             return
+        if self.is_space(event):
+            self.process_space_keypress()
+            return
         if self.test_text.is_correct_input(event.char, self.cursor_position):
             self.set_char_tag('correct')
         else:
@@ -68,6 +71,14 @@ class TextFrame(Text):
         else:
             self.remove_tags_at_index(self.cursor_position)
             self.set_char_tag('incorrect')
+            self.move_cursor_forwards()
+
+    @staticmethod
+    def is_space(event):
+        return event.char == ' '
+
+    def process_space_keypress(self):
+        pass
 
     def remove_tags_at_index(self, index):
         for tag in self.tag_names(f'1.{index}'):
