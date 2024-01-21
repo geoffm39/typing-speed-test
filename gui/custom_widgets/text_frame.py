@@ -44,14 +44,23 @@ class TextFrame(Text):
         if self.is_backspace(event):
             self.process_backspace_keypress()
             return
+        if self.is_numpad_mode():
+            self.process_numpad_input(event)
+            return
         if self.is_space(event):
             self.process_space_keypress()
             return
+        self.apply_relevant_tag(event)
+        self.move_cursor_forwards()
+
+    def process_numpad_input(self, event):
+        pass
+
+    def apply_relevant_tag(self, event):
         if self.test_text.is_correct_input(event.char, self.cursor_position):
             self.set_char_tag('correct')
         else:
             self.set_char_tag('incorrect')
-        self.move_cursor_forwards()
 
     def set_char_tag(self, tag):
         self.tag_add(tag, f'1.{self.cursor_position}')
@@ -63,6 +72,9 @@ class TextFrame(Text):
     @staticmethod
     def is_backspace(event):
         return event.keysym == 'BackSpace'
+
+    def is_numpad_mode(self):
+        return self.test_mode == 'numpad'
 
     def process_backspace_keypress(self):
         if self.backspace_allowed:
