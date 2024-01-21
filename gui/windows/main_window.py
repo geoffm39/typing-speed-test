@@ -9,12 +9,13 @@ from test_result import TestResult
 
 class MainWindow:
     def __init__(self, root: Tk):
-        root.title('Typing Speed Test')
-        root.iconbitmap('gui/keyboard_icon.ico')
-        root.columnconfigure(0, weight=1)
-        root.rowconfigure(0, weight=1)
+        self.root = root
+        self.root.title('Typing Speed Test')
+        self.root.iconbitmap('gui/keyboard_icon.ico')
+        self.root.columnconfigure(0, weight=1)
+        self.root.rowconfigure(0, weight=1)
 
-        mainframe = ttk.Frame(root)
+        mainframe = ttk.Frame(self.root)
         mainframe.grid(column=0, row=0, sticky='nwes')
         mainframe.columnconfigure(0, weight=1)
         mainframe.rowconfigure(1, weight=1)
@@ -25,8 +26,6 @@ class MainWindow:
         test_frame = ttk.Frame(mainframe, borderwidth=5, relief='ridge')
         test_frame.grid(column=0, row=1, padx=50, pady=(0, 50), sticky='nwes')
         test_frame.columnconfigure(0, weight=1)
-
-        root.bind('<Key>', self.on_key_press)
 
         self.options_frame = OptionsFrame(test_frame)
         self.text_frame = TextFrame(test_frame, width=100, height=30, wrap='word', takefocus=0)
@@ -50,6 +49,8 @@ class MainWindow:
         options = self.options_frame.get_options()
         self.text_frame.set_options(options['mode'], options['backspace'])
         self.text_frame.add_text()
+
+        self.root.bind('<Key>', self.on_key_press)
 
         self.start_button.configure(state='disabled')
         self.start_button.grid_forget()

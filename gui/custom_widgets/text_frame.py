@@ -54,7 +54,15 @@ class TextFrame(Text):
         self.move_cursor_forwards()
 
     def process_numpad_input(self, event):
-        pass
+        if self.is_enter(event):
+            self.process_space_keypress()
+            return
+        self.apply_relevant_tag(event)
+        self.move_cursor_forwards()
+
+    @staticmethod
+    def is_enter(event):
+        return event.keysym == 'Return'
 
     def apply_relevant_tag(self, event):
         if self.test_text.is_correct_input(event.char, self.cursor_position):
