@@ -53,16 +53,24 @@ class TextFrame(Text):
         self.apply_relevant_tag(event)
         self.move_cursor_forwards()
 
-    def process_numpad_input(self, event):
-        if self.is_enter(event):
-            self.process_space_keypress()
-            return
-        self.apply_relevant_tag(event)
-        self.move_cursor_forwards()
+    @staticmethod
+    def is_backspace(event):
+        return event.keysym == 'BackSpace'
 
+    @staticmethod
+    def is_modifier_key(event):
+        return event.keysym in MODIFIER_KEYS
     @staticmethod
     def is_enter(event):
         return event.keysym == 'Return'
+
+    @staticmethod
+    def is_numpad_mode(self):
+        return self.test_mode == 'numpad'
+
+    @staticmethod
+    def is_space(event):
+        return event.char == ' '
 
     def apply_relevant_tag(self, event):
         if self.test_text.is_correct_input(event.char, self.cursor_position):
@@ -73,16 +81,12 @@ class TextFrame(Text):
     def set_char_tag(self, tag):
         self.tag_add(tag, f'1.{self.cursor_position}')
 
-    @staticmethod
-    def is_modifier_key(event):
-        return event.keysym in MODIFIER_KEYS
-
-    @staticmethod
-    def is_backspace(event):
-        return event.keysym == 'BackSpace'
-
-    def is_numpad_mode(self):
-        return self.test_mode == 'numpad'
+    def process_numpad_input(self, event):
+        if self.is_enter(event):
+            self.process_space_keypress()
+            return
+        self.apply_relevant_tag(event)
+        self.move_cursor_forwards()
 
     def process_backspace_keypress(self):
         if self.backspace_allowed:
@@ -92,10 +96,6 @@ class TextFrame(Text):
             self.remove_tags_at_index(self.cursor_position)
             self.set_char_tag('incorrect')
             self.move_cursor_forwards()
-
-    @staticmethod
-    def is_space(event):
-        return event.char == ' '
 
     def process_space_keypress(self):
         if self.test_text.is_correct_input(' ', self.cursor_position):
