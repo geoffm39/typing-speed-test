@@ -78,7 +78,17 @@ class TextFrame(Text):
         return event.char == ' '
 
     def process_space_keypress(self):
-        pass
+        if self.test_text.is_correct_input(' ', self.cursor_position):
+            self.move_cursor_forwards()
+        else:
+            self.jump_to_next_word()
+
+    def jump_to_next_word(self):
+        self.set_char_tag('incorrect')
+        self.move_cursor_forwards()
+        if not self.test_text.is_correct_input(' ', self.cursor_position):
+            return self.jump_to_next_word()
+        self.move_cursor_forwards()
 
     def remove_tags_at_index(self, index):
         for tag in self.tag_names(f'1.{index}'):
