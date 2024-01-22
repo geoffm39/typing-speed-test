@@ -36,10 +36,15 @@ class TextFrame(Text):
 
     def add_text(self):
         text = self.test_text.generate_text(self.test_mode)
+        self.configure(state='normal')
         self.insert('end', text)
+        self.configure(state='disabled')
+        self.update_idletasks()
 
     def process_keyboard_input(self, event):
-        self.see(f'1.{self.cursor_position} + 2c')
+        if self.is_nearing_end_of_text():
+            self.add_text()
+        self.move_cursor_into_view()
         if self.is_modifier_key(event):
             return
         if self.is_backspace(event):
@@ -72,6 +77,12 @@ class TextFrame(Text):
 
     def is_numpad_mode(self):
         return self.test_mode == 'numpad'
+
+    def is_nearing_end_of_text(self):
+        return self.compare(f'1.{self.cursor_position + 50}', '>=', '1.end')
+
+    def move_cursor_into_view(self):
+        self.see(f'1.{self.cursor_position} + 2c')
 
     def apply_relevant_tag(self, event):
         if self.test_text.is_correct_input(event.char, self.cursor_position):

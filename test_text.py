@@ -21,7 +21,7 @@ class TestText:
         return text
 
     def generate_easy_text(self):
-        words_list = self.word_generator.random_words(amount=500)
+        words_list = self.word_generator.random_words(amount=100)
         words = ' '.join(words_list)
         self.text += words
         return words
