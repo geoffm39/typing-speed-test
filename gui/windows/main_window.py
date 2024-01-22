@@ -28,7 +28,7 @@ class MainWindow:
         test_frame.columnconfigure(0, weight=1)
 
         self.options_frame = OptionsFrame(test_frame)
-        self.text_frame = TextFrame(test_frame, width=100, height=30, wrap='word', takefocus=0)
+        self.text_frame = TextFrame(test_frame, width=80, height=10, wrap='word', takefocus=0)
         self.text_scrollbar = ttk.Scrollbar(test_frame,
                                             orient='vertical',
                                             command=self.text_frame.yview)
@@ -49,6 +49,7 @@ class MainWindow:
         options = self.options_frame.get_options()
         self.text_frame.set_options(options['mode'], options['backspace'])
         self.text_frame.add_text()
+        self.text_frame.configure(state='disabled')
 
         self.root.bind('<Key>', self.on_key_press)
 
