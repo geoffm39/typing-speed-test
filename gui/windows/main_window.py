@@ -56,11 +56,21 @@ class MainWindow:
         self.options_frame.grid(column=0, row=0)
 
     def restart_test(self):
-        if self.timer:
-            self.root.after_cancel(self.timer)
-            self.timer = None
+        if self.timer_is_running():
+            self.cancel_timer()
+        self.timer = None
+        self.stop_test()
         self.text_frame.clear_text()
         self.options_view()
+
+    def stop_test(self):
+        self.root.unbind('<Key>')
+
+    def timer_is_running(self):
+        return bool(self.timer)
+
+    def cancel_timer(self):
+        self.root.after_cancel(self.timer)
 
     def start_timer(self):
         time_limit = self.options['time_limit']
@@ -77,6 +87,7 @@ class MainWindow:
         else:
             self.timer_label.configure(text="Time's Up!")
             self.timer = None
+            self.stop_test()
 
     def set_timer_label(self, count):
         timer_minutes = count // 60
