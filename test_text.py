@@ -11,6 +11,9 @@ class TestText:
         self.word_generator = RandomWord()
         self.paragraph_generator = DocumentGenerator()
 
+    def reset_text(self):
+        self.text = ''
+
     def generate_text(self, test_mode: str):
         if test_mode == 'easy':
             text = self.generate_easy_text()

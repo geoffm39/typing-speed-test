@@ -58,6 +58,8 @@ class MainWindow:
     def restart_test(self):
         if self.timer:
             self.root.after_cancel(self.timer)
+            self.timer = None
+        self.text_frame.clear_text()
         self.options_view()
 
     def start_timer(self):
@@ -74,6 +76,7 @@ class MainWindow:
             self.timer = self.root.after(1000, self.count_down, count-1)
         else:
             self.timer_label.configure(text="Time's Up!")
+            self.timer = None
 
     def set_timer_label(self, count):
         timer_minutes = count // 60

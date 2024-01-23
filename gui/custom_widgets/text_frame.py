@@ -30,6 +30,9 @@ class TextFrame(Text):
             return
         self.cursor_position -= 1
 
+    def reset_cursor(self):
+        self.cursor_position = 0
+
     def set_options(self, test_mode, backspace_allowed):
         self.test_mode = test_mode
         self.backspace_allowed = backspace_allowed
@@ -40,6 +43,13 @@ class TextFrame(Text):
         self.insert('end', text)
         self.configure(state='disabled')
         self.update_idletasks()
+
+    def clear_text(self):
+        self.test_text.reset_text()
+        self.configure(state='normal')
+        self.delete('1.0', 'end')
+        self.configure(state='disabled')
+        self.reset_cursor()
 
     def process_keyboard_input(self, event):
         if self.is_nearing_end_of_text():
