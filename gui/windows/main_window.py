@@ -40,6 +40,7 @@ class MainWindow:
         self.results_frame = ResultsFrame(test_frame)
 
         self.start_button = ttk.Button(button_frame, text='Generate Text', command=self.apply_options)
+        self.stop_button = ttk.Button(button_frame, text='Stop Test', command=self.stop_test)
         self.restart_test_button = ttk.Button(button_frame, text='Restart Test', command=self.restart_test)
         self.timer_label = ttk.Label(button_frame)
 
@@ -47,6 +48,7 @@ class MainWindow:
 
     def options_view(self):
         self.restart_test_button.grid_forget()
+        self.stop_button.grid_forget()
         self.results_frame.grid_forget()
         self.text_frame.grid_forget()
         self.timer_label.grid_forget()
@@ -55,15 +57,30 @@ class MainWindow:
         self.start_button.grid(column=0, row=0)
         self.options_frame.grid(column=0, row=0)
 
+    def text_view(self):
+        self.start_button.configure(state='disabled')
+        self.start_button.grid_forget()
+        self.options_frame.grid_forget()
+
+        self.restart_test_button.grid(column=2, row=0, padx=20)
+        self.timer_label.grid(column=0, row=0, padx=20)
+        self.text_frame.grid(column=0, row=0)
+        self.text_scrollbar.grid(column=1, row=0, sticky='ns')
+        if self.is_marathon_mode():
+            self.stop_button.grid(column=1, row=0, padx=20)
+
+    def is_marathon_mode(self):
+        return self.options['time_limit'] is None
+
     def restart_test(self):
-        if self.timer_is_running():
-            self.cancel_timer()
-        self.timer = None
         self.stop_test()
         self.text_frame.clear_text()
         self.options_view()
 
     def stop_test(self):
+        if self.timer_is_running():
+            self.cancel_timer()
+        self.timer = None
         self.root.unbind('<Key>')
 
     def timer_is_running(self):
@@ -78,7 +95,7 @@ class MainWindow:
             timer_in_seconds = time_limit * 60
             self.count_down(timer_in_seconds)
         else:
-            self.timer_label.configure(text='Marathon Mode!')
+            self.count_up(0)
 
     def count_down(self, count):
         self.set_timer_label(count)
@@ -88,6 +105,10 @@ class MainWindow:
             self.timer_label.configure(text="Time's Up!")
             self.timer = None
             self.stop_test()
+
+    def count_up(self, count):
+        self.set_timer_label(count)
+        self.timer = self.root.after(1000, self.count_up, count+1)
 
     def set_timer_label(self, count):
         timer_minutes = count // 60
@@ -109,12 +130,4 @@ class MainWindow:
         self.text_frame.configure(state='disabled')
 
         self.root.bind('<Key>', self.on_key_press)
-
-        self.start_button.configure(state='disabled')
-        self.start_button.grid_forget()
-        self.options_frame.grid_forget()
-
-        self.restart_test_button.grid(column=1, row=0, padx=20)
-        self.timer_label.grid(column=0, row=0, padx=20)
-        self.text_frame.grid(column=0, row=0)
-        self.text_scrollbar.grid(column=1, row=0, sticky='ns')
+        self.text_view()
