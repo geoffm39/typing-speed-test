@@ -135,3 +135,6 @@ class TextFrame(Text):
     def remove_tags_at_index(self, index):
         for tag in self.tag_names(f'1.{index}'):
             self.tag_remove(tag, f'1.{index}')
+
+    def get_test_data(self):
+        pass

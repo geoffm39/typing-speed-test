@@ -26,6 +26,8 @@ class TestText:
     def generate_easy_text(self):
         words_list = self.word_generator.random_words(amount=100)
         words = ' '.join(words_list)
+        if not self.text_is_empty():
+            words = f' {words}'
         self.text += words
         return words
 
@@ -34,6 +36,8 @@ class TestText:
         for _ in range(5):
             paragraph = self.generate_paragraph()
             paragraphs += paragraph
+        if not self.text_is_empty():
+            paragraphs = f' {paragraphs}'
         self.text += paragraphs
         return paragraphs
 
@@ -43,6 +47,9 @@ class TestText:
             return self.generate_paragraph()
         filtered_paragraph = ''.join(char for char in paragraph if char in VALID_CHARACTERS)
         return filtered_paragraph
+
+    def text_is_empty(self):
+        return self.text == ''
 
     @staticmethod
     def is_valid_text(text):
@@ -55,6 +62,8 @@ class TestText:
             random_number = ''.join(random_digits)
             random_character = random.choice(NUMPAD_CHARACTERS)
             numbers += f'{random_number}{random_character}'
+        if not self.text_is_empty():
+            numbers = f' {numbers}'
         self.text += numbers
         return numbers
 
