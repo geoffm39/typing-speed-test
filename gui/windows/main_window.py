@@ -4,7 +4,7 @@ from tkinter import ttk
 from gui.custom_widgets.text_frame import TextFrame
 from gui.custom_widgets.results_frame import ResultsFrame
 from gui.custom_widgets.options_frame import OptionsFrame
-
+from timer import Timer
 
 class MainWindow:
     def __init__(self, root: Tk):
@@ -14,7 +14,7 @@ class MainWindow:
         self.root.columnconfigure(0, weight=1)
         self.root.rowconfigure(0, weight=1)
 
-        self.timer = None
+        self.timer = Timer(root)
         self.options = None
 
         mainframe = ttk.Frame(self.root)
@@ -78,16 +78,10 @@ class MainWindow:
         self.options_view()
 
     def stop_test(self):
-        if self.timer_is_running():
-            self.cancel_timer()
-        self.timer = None
+        if self.timer.timer_is_running():
+            self.timer.stop_timer()
+        self.timer.reset_timer()
         self.root.unbind('<Key>')
-
-    def timer_is_running(self):
-        return bool(self.timer)
-
-    def cancel_timer(self):
-        self.root.after_cancel(self.timer)
 
     def start_timer(self):
         time_limit = self.options['time_limit']
@@ -118,8 +112,8 @@ class MainWindow:
         self.timer_label.configure(text=f'{timer_minutes}:{timer_seconds}')
 
     def on_key_press(self, event):
-        if not self.timer:
-            self.start_timer()
+        if not self.timer.timer:
+            self.timer.start_timer(self.options['time_limit'], self.set_timer_label)
         self.text_frame.process_keyboard_input(event)
 
     def apply_options(self):
