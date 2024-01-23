@@ -69,6 +69,14 @@ class MainWindow:
         if self.is_marathon_mode():
             self.stop_button.grid(column=1, row=0, padx=20)
 
+    def results_view(self):
+        self.timer_label.grid_forget()
+        self.text_frame.grid_forget()
+        self.text_scrollbar.grid_forget()
+        self.stop_button.grid_forget()
+
+        self.results_frame.grid(column=0, row=0)
+
     def is_marathon_mode(self):
         return self.options['time_limit'] is None
 
@@ -82,6 +90,7 @@ class MainWindow:
             self.cancel_timer()
         self.timer = None
         self.root.unbind('<Key>')
+        self.results_view()
 
     def timer_is_running(self):
         return bool(self.timer)
