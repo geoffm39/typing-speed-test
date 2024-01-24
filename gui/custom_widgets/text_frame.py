@@ -146,12 +146,27 @@ class TextFrame(Text):
                    'incorrect_words': 0,
                    'correct_chars': 0,
                    'incorrect_chars': 0}
+        wrong_word_flag = False
         for index in range(self.test_text.get_text_char_count()):
             if not self.char_has_tag(index):
                 return results
-            # if self.char_has_incorrect_tag(index):
-            #     results['incorrect_chars'] += 1
-
+            if self.is_space(index):
+                if self.char_has_incorrect_tag(index):
+                    results['incorrect_chars'] += 1
+                else:
+                    results['correct_chars'] += 1
+                if wrong_word_flag:
+                    results['incorrect_words'] += 1
+                else:
+                    results['correct_words'] += 1
+                wrong_word_flag = False
+                continue
+            if self.char_has_incorrect_tag(index):
+                results['incorrect_chars'] += 1
+                wrong_word_flag = True
+            else:
+                results['correct_chars'] += 1
+        return results
 
     def char_has_tag(self, index):
         return bool(self.tag_names(f'1.{index}'))
