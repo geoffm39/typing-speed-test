@@ -57,13 +57,13 @@ class TextFrame(Text):
         self.move_cursor_into_view()
         if self.is_modifier_key(event):
             return
-        if self.is_backspace(event):
+        if self.is_backspace_keypress(event):
             self.process_backspace_keypress()
             return
         if self.is_numpad_mode():
             self.process_numpad_input(event)
             return
-        if self.is_space(event):
+        if self.is_space_keypress(event):
             self.process_space_keypress()
             return
         self.apply_relevant_tag(event)
@@ -74,15 +74,15 @@ class TextFrame(Text):
         return event.keysym in MODIFIER_KEYS
 
     @staticmethod
-    def is_backspace(event):
+    def is_backspace_keypress(event):
         return event.keysym == 'BackSpace'
 
     @staticmethod
-    def is_enter(event):
+    def is_enter_keypress(event):
         return event.keysym == 'Return'
 
     @staticmethod
-    def is_space(event):
+    def is_space_keypress(event):
         return event.char == ' '
 
     def is_numpad_mode(self):
@@ -104,7 +104,7 @@ class TextFrame(Text):
         self.tag_add(tag, f'1.{self.cursor_position}')
 
     def process_numpad_input(self, event):
-        if self.is_enter(event):
+        if self.is_enter_keypress(event):
             self.process_space_keypress()
             return
         self.apply_relevant_tag(event)
@@ -121,6 +121,7 @@ class TextFrame(Text):
 
     def process_space_keypress(self):
         if self.test_text.is_correct_input(' ', self.cursor_position):
+            self.set_char_tag('correct')
             self.move_cursor_forwards()
         else:
             self.jump_to_next_word()
@@ -128,13 +129,32 @@ class TextFrame(Text):
     def jump_to_next_word(self):
         self.set_char_tag('incorrect')
         self.move_cursor_forwards()
-        if not self.test_text.is_correct_input(' ', self.cursor_position):
+        if not self.is_space(self.cursor_position):
             return self.jump_to_next_word()
+        self.set_char_tag('correct')
         self.move_cursor_forwards()
+
+    def is_space(self, index):
+        return self.get(f'1.{index}') == ' '
 
     def remove_tags_at_index(self, index):
         for tag in self.tag_names(f'1.{index}'):
             self.tag_remove(tag, f'1.{index}')
 
-    def get_test_data(self):
-        pass
+    def count_test_results(self):
+        results = {'correct_words': 0,
+                   'incorrect_words': 0,
+                   'correct_chars': 0,
+                   'incorrect_chars': 0}
+        for index in range(self.test_text.get_text_char_count()):
+            if not self.char_has_tag(index):
+                return results
+            # if self.char_has_incorrect_tag(index):
+            #     results['incorrect_chars'] += 1
+
+
+    def char_has_tag(self, index):
+        return bool(self.tag_names(f'1.{index}'))
+
+    def char_has_incorrect_tag(self, index):
+        return self.tag_names(f'1.{index}')[0] == 'incorrect'

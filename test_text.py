@@ -69,3 +69,6 @@ class TestText:
 
     def is_correct_input(self, char, index):
         return char == self.text[index]
+
+    def get_text_char_count(self):
+        return len(self.text)
