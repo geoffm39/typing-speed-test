@@ -18,6 +18,8 @@ class TextFrame(Text):
         self.cursor_position = 0
         self.test_mode = None
         self.backspace_allowed = True
+        self.backspace_count = 0
+        self.keypress_count = 0
 
         self.tag_configure('correct', foreground='green')
         self.tag_configure('incorrect', foreground='red')
@@ -52,6 +54,7 @@ class TextFrame(Text):
         self.reset_cursor()
 
     def process_keyboard_input(self, event):
+        self.keypress_count += 1
         if self.is_nearing_end_of_text():
             self.add_text()
         self.move_cursor_into_view()
@@ -112,6 +115,7 @@ class TextFrame(Text):
 
     def process_backspace_keypress(self):
         if self.backspace_allowed:
+            self.backspace_count += 1
             self.move_cursor_backwards()
             self.remove_tags_at_index(self.cursor_position)
         else:
@@ -141,11 +145,13 @@ class TextFrame(Text):
         for tag in self.tag_names(f'1.{index}'):
             self.tag_remove(tag, f'1.{index}')
 
-    def count_test_results(self):
+    def get_test_data(self):
         results = {'correct_words': 0,
                    'incorrect_words': 0,
                    'correct_chars': 0,
-                   'incorrect_chars': 0}
+                   'incorrect_chars': 0,
+                   'backspace_count': self.backspace_count,
+                   'keys_pressed': self.keypress_count}
         wrong_word_flag = False
         for index in range(self.test_text.get_text_char_count()):
             if not self.char_has_tag(index):

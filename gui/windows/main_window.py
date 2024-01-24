@@ -40,9 +40,10 @@ class MainWindow:
         self.results_frame = ResultsFrame(test_frame)
 
         self.start_button = ttk.Button(button_frame, text='Generate Text', command=self.apply_options)
-        self.stop_button = ttk.Button(button_frame, text='Stop Test', command=self.stop_test)
+        self.stop_button = ttk.Button(button_frame, text='Stop Test', command=self.show_test_results)
         self.restart_test_button = ttk.Button(button_frame, text='Restart Test', command=self.restart_test)
-        self.timer_label = ttk.Label(button_frame)
+        self.timer_string = StringVar(value='Type to Begin!')
+        self.timer_label = ttk.Label(button_frame, textvariable=self.timer_string)
 
         self.options_view()
 
@@ -82,15 +83,44 @@ class MainWindow:
 
     def restart_test(self):
         self.stop_test()
-        self.text_frame.clear_text()
         self.options_view()
 
     def stop_test(self):
         if self.timer_is_running():
             self.cancel_timer()
         self.timer = None
-        self.root.unbind('<Key>')
+        self.stop_keyboard_input()
+        self.text_frame.clear_text()
+
+    def show_test_results(self):
+        test_data = self.get_test_data()
+        print(test_data) # CHANGE PRINT TO PASSING DATA TO TEST RESULTS
+        self.stop_test()
         self.results_view()
+        self.results_frame.show_results()
+
+    def get_test_data(self):
+        test_data = self.text_frame.get_test_data()
+        minutes = self.get_timer_value()
+        test_data['minutes'] = minutes
+        return test_data
+
+    def get_timer_value(self):
+        if self.is_marathon_mode():
+            minutes = self.get_marathon_time()
+        else:
+            minutes = self.options['time_limit']
+        return minutes
+
+    def get_marathon_time(self):
+        timer_string = self.timer_string.get()
+        minutes, seconds = timer_string.split(':')
+        second_decimal_value = int(seconds) / 60
+        minutes = int(minutes) + second_decimal_value
+        return minutes
+
+    def stop_keyboard_input(self):
+        self.root.unbind('<Key>')
 
     def timer_is_running(self):
         return bool(self.timer)
@@ -111,7 +141,6 @@ class MainWindow:
         if count > 0:
             self.timer = self.root.after(1000, self.count_down, count-1)
         else:
-            self.timer_label.configure(text="Time's Up!")
             self.timer = None
             self.stop_test()
 
@@ -124,7 +153,7 @@ class MainWindow:
         timer_seconds = count % 60
         if timer_seconds < 10:
             timer_seconds = f'0{timer_seconds}'
-        self.timer_label.configure(text=f'{timer_minutes}:{timer_seconds}')
+        self.timer_string.set(f'{timer_minutes}:{timer_seconds}')
 
     def on_key_press(self, event):
         if not self.timer:
@@ -134,7 +163,6 @@ class MainWindow:
     def apply_options(self):
         self.options = self.options_frame.get_options()
         self.text_frame.set_options(self.options['mode'], self.options['backspace'])
-        self.timer_label.configure(text='Type to Begin!')
         self.text_frame.add_text()
         self.text_frame.configure(state='disabled')
 
