@@ -142,7 +142,7 @@ class MainWindow:
             self.timer = self.root.after(1000, self.count_down, count-1)
         else:
             self.timer = None
-            self.stop_test()
+            self.show_test_results()
 
     def count_up(self, count):
         self.set_timer_label(count)
