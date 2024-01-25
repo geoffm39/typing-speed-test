@@ -10,5 +10,5 @@ class ResultsFrame(ttk.Frame):
 
         self.test_result = TestResult()
 
-    def show_results(self):
-        pass
+    def show_results(self, test_data):
+        print(test_data)

@@ -94,15 +94,15 @@ class MainWindow:
 
     def show_test_results(self):
         test_data = self.get_test_data()
-        print(test_data) # CHANGE PRINT TO PASSING DATA TO TEST RESULTS
         self.stop_test()
         self.results_view()
-        self.results_frame.show_results()
+        self.results_frame.show_results(test_data)
 
     def get_test_data(self):
         test_data = self.text_frame.get_test_data()
         minutes = self.get_timer_value()
         test_data['minutes'] = minutes
+        test_data['mode'] = self.options['mode']
         return test_data
 
     def get_timer_value(self):
