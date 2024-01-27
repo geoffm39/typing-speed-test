@@ -13,4 +13,4 @@ class ResultsFrame(ttk.Frame):
     def show_results(self, test_data):
         self.test_result.calculate_test_results(test_data)
         results = self.test_result.get_test_results()
-        print(results)
+        high_score = self.test_result.get_highscores()[test_data['mode']]
