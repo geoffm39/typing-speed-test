@@ -91,6 +91,7 @@ class MainWindow:
         self.timer = None
         self.stop_keyboard_input()
         self.text_frame.clear_text()
+        self.text_frame.clear_counts()
 
     def show_test_results(self):
         test_data = self.get_test_data()

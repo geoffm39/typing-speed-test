@@ -53,6 +53,10 @@ class TextFrame(Text):
         self.configure(state='disabled')
         self.reset_cursor()
 
+    def clear_counts(self):
+        self.keypress_count = 0
+        self.backspace_count = 0
+
     def process_keyboard_input(self, event):
         self.keypress_count += 1
         if self.is_nearing_end_of_text():
