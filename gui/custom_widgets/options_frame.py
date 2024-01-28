@@ -59,6 +59,6 @@ class OptionsFrame(ttk.Frame):
 
     @staticmethod
     def show_numlock_warning():
-        messagebox.showwarning(title='NumLock',
+        messagebox.showinfo(title='NumLock',
                                message="Press 'Enter' during the test to move to the next number."
                                        "\nMake sure NumLock is on before continuing!")
