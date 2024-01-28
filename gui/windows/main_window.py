@@ -59,8 +59,6 @@ class MainWindow:
         self.timer_label.grid(column=0, row=0, padx=20)
         self.text_frame.grid(column=0, row=0)
         self.text_scrollbar.grid(column=1, row=0, sticky='ns')
-        if self.is_marathon_mode():
-            self.stop_button.grid(column=1, row=0, padx=20)
 
     def results_view(self):
         self.timer_label.grid_forget()
@@ -127,7 +125,11 @@ class MainWindow:
             timer_in_seconds = time_limit * 60
             self.count_down(timer_in_seconds)
         else:
+            self.root.after(60000, self.show_stop_button)
             self.count_up(0)
+
+    def show_stop_button(self):
+        self.stop_button.grid(column=1, row=0, padx=20)
 
     def count_down(self, count):
         self.set_timer_label(count)
