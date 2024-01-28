@@ -11,25 +11,17 @@ class MainWindow:
         self.root = root
         self.root.title('Typing Speed Test')
         self.root.iconbitmap('gui/keyboard_icon.ico')
-        self.root.columnconfigure(0, weight=1)
-        self.root.rowconfigure(0, weight=1)
+        self.root.resizable(FALSE, FALSE)
 
         self.timer = None
         self.options = None
 
         mainframe = ttk.Frame(self.root)
         mainframe.grid(column=0, row=0, sticky='nwes')
-        mainframe.columnconfigure(0, weight=1)
-        mainframe.rowconfigure(1, weight=1)
         button_frame = ttk.Frame(mainframe)
-        button_frame.columnconfigure(0, weight=1)
-        button_frame.rowconfigure(0, weight=1)
         button_frame.grid(column=0, row=0, pady=(15, 15))
-        button_frame.columnconfigure(0, weight=1)
-        button_frame.columnconfigure(1, weight=1)
         test_frame = ttk.Frame(mainframe, borderwidth=5, relief='ridge')
         test_frame.grid(column=0, row=1, padx=50, pady=(0, 50), sticky='nwes')
-        test_frame.columnconfigure(0, weight=1)
 
         self.options_frame = OptionsFrame(test_frame)
         self.text_frame = TextFrame(test_frame, width=80, height=10, wrap='word', takefocus=0)
@@ -161,11 +153,15 @@ class MainWindow:
             self.start_timer()
         self.text_frame.process_keyboard_input(event)
 
+    def clear_timer_label(self):
+        self.timer_string.set(value='Type to Begin!')
+
     def apply_options(self):
         self.options = self.options_frame.get_options()
         self.text_frame.set_options(self.options['mode'], self.options['backspace'])
         self.text_frame.add_text()
         self.text_frame.configure(state='disabled')
+        self.clear_timer_label()
 
         self.root.bind('<Key>', self.on_key_press)
         self.text_view()

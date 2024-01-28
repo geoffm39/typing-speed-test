@@ -1,6 +1,7 @@
 import tkinter
 from tkinter import *
 from tkinter import ttk
+from tkinter import messagebox
 
 from constants import TIMER_OPTIONS
 
@@ -32,7 +33,10 @@ class OptionsFrame(ttk.Frame):
         self.mode = StringVar(value='easy')
         easy = ttk.Radiobutton(self, text='Easy', variable=self.mode, value='easy')
         hard = ttk.Radiobutton(self, text='Hard', variable=self.mode, value='hard')
-        numbad = ttk.Radiobutton(self, text='Numpad', variable=self.mode, value='numpad')
+        numpad = ttk.Radiobutton(self, text='Numpad',
+                                 variable=self.mode,
+                                 value='numpad',
+                                 command=self.show_numlock_warning)
 
         time_label.grid(column=0, row=0)
         time_combobox.grid(column=1, row=0)
@@ -40,7 +44,7 @@ class OptionsFrame(ttk.Frame):
         mode_label.grid(column=0, row=1)
         easy.grid(column=1, row=1)
         hard.grid(column=2, row=1)
-        numbad.grid(column=3, row=1)
+        numpad.grid(column=3, row=1)
 
     def set_time_limit(self, event) -> None:
         time_limit_string = self.time_limit.get()
@@ -50,3 +54,7 @@ class OptionsFrame(ttk.Frame):
         self.options['mode'] = self.mode.get()
         self.options['backspace'] = self.backspace_enabled.get()
         return self.options
+
+    @staticmethod
+    def show_numlock_warning():
+        messagebox.showwarning(title='NumLock', message='Make sure NumLock is on before continuing!')
