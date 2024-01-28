@@ -29,22 +29,24 @@ class OptionsFrame(ttk.Frame):
                                                 onvalue=True,
                                                 offvalue=False)
 
-        mode_label = ttk.Label(self, text='Mode:')
+        mode_frame = ttk.Frame(self)
+        mode_frame.grid(column=0, row=1, columnspan=3, pady=10)
+        mode_label = ttk.Label(mode_frame, text='Mode:')
         self.mode = StringVar(value='easy')
-        easy = ttk.Radiobutton(self, text='Easy', variable=self.mode, value='easy')
-        hard = ttk.Radiobutton(self, text='Hard', variable=self.mode, value='hard')
-        numpad = ttk.Radiobutton(self, text='Numpad',
+        easy = ttk.Radiobutton(mode_frame, text='Easy', variable=self.mode, value='easy')
+        hard = ttk.Radiobutton(mode_frame, text='Hard', variable=self.mode, value='hard')
+        numpad = ttk.Radiobutton(mode_frame, text='Numpad',
                                  variable=self.mode,
                                  value='numpad',
                                  command=self.show_numlock_warning)
 
-        time_label.grid(column=0, row=0)
-        time_combobox.grid(column=1, row=0)
-        backspace_checkbutton.grid(column=2, row=0)
-        mode_label.grid(column=0, row=1)
-        easy.grid(column=1, row=1)
-        hard.grid(column=2, row=1)
-        numpad.grid(column=3, row=1)
+        time_label.grid(column=0, row=0, pady=(10, 0), padx=5)
+        time_combobox.grid(column=1, row=0, pady=(10, 0))
+        backspace_checkbutton.grid(column=2, row=0, pady=(10, 0), padx=5)
+        mode_label.grid(column=0, row=0)
+        easy.grid(column=1, row=0, padx=(10, 5))
+        hard.grid(column=2, row=0, padx=(5, 10))
+        numpad.grid(column=3, row=0)
 
     def set_time_limit(self, event) -> None:
         time_limit_string = self.time_limit.get()
